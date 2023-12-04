@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head xmlns="http://www.w3.org/1999/xhtml">
+    <meta charset="UTF-8">
+    <title>House Price Predictor</title>
+    <link rel="stylesheet" type="text/css" href="C:\Users\ASUS\Downloads\car_price_predictor-master\static\css\style.css" />       
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+
+</head>
+<body class="bg-dark">
+
+<div class="container">
+    <div class="row">
+        <div class="card mt-50" style="width: 100%; height: 100%">
+            <div class="card-header" style="text-align: center">
+                <h1>Welcome to house Price Predictor</h1>
+            </div>
+            <div class="card-body">
+                <div class="col-12" style="text-align: center">
+                    <h5>This app predicts the price of a house you want to sell. Try filling the details below: </h5>
+                </div>
+                <br>
+                <form method="post" accept-charset="utf-8" name="Modelform">
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Select the bedrooms:</b> </label><br>
+                        <select class="selectpicker form-control" id="bedroom" name="bedroom" required="1"
+                                onchange="load_car_models(this.id,'car_models')">
+                            {% for bedroom in bedrooms %}
+                            <option value="{{ bedroom }}">{{ bedroom }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Select the bathrooms:</b> </label><br>
+                        <select class="selectpicker form-control" id="bathroom" name="bathroom" required="1"
+                        onchange="load_car_models(this.id,'car_models')">
+                    {% for bathroom in bathrooms %}
+                    <option value="{{ bathroom }}">{{ bathroom }}</option>
+                    {% endfor %}
+                </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Select floors :</b> </label><br>
+                        <select class="selectpicker form-control" id="floor" name="floor" required="1">
+                            {% for floor in floors %}
+                            <option value="{{ floor }}">{{ floor }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Select the Grade:</b> </label><br>
+                        <select class="selectpicker form-control" id="grade" name="grade" required="1">
+                            {% for grade in grades %}
+                            <option value="{{ grade }}">{{ grade }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Enter the sqft_living that the housee has :</b> </label><br>
+                        <input type="text" class="form-control" id="sqft_living" name="sqft_living"
+                               placeholder="Enter the sqft_living  ">
+                               
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Enter the sqft_lot that the house has:</b> </label><br>
+                        <input type="text" class="form-control" id="sqft_lot" name="sqft_lot"
+                               placeholder="Enter the sqft_lot">
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Enter the waterfront  :</b> </label><br>
+                        <select class="selectpicker form-control" id="waterfront" name="waterfront" required="1">
+                            {% for waterfront in waterfronts %}
+                            <option value="{{ waterfront }}">{{ waterfront }}</option>
+                            {% endfor %}
+                        </select>
+                            
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Enter the view:</b> </label><br>
+                      
+                               <select class="selectpicker form-control" id="view" name="view" required="1">
+                                {% for view in views %}
+                                <option value="{{ view }}">{{ view }}</option>
+                                {% endfor %}
+                            </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Enter the condition:</b> </label><br>
+                     
+                               <select class="selectpicker form-control" id="condition" name="condition" required="1">
+                                {% for condition in conditions %}
+                                <option value="{{ condition }}">{{ condition }}</option>
+                                {% endfor %}
+                            </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Enter the sqft_above:</b> </label><br>
+                        <input type="text" class="form-control" id="sqft_above" name="sqft_above"
+                               placeholder="Enter thesqft_above ">
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Enter the sqft_basement:</b> </label><br>
+                        <input type="text" class="form-control" id="sqft_basement" name="sqft_basement"
+                               placeholder="Enter the sqft_basement">
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Enter the yr_built:</b> </label><br>
+                      
+                               <select class="selectpicker form-control" id="yr_built" name="yr_built" required="1">
+                                {% for yr_built in yr_builts %}
+                                <option value="{{ yr_built }}">{{ yr_built }}</option>
+                                {% endfor %}
+                            </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Enter the yr_renovated:</b> </label><br>
+                  
+                               <select class="selectpicker form-control" id="yr_renovated" name="yr_renovated" required="1">
+                                {% for yr_renovated in yr_renovateds %}
+                                <option value="{{ yr_renovated }}">{{ yr_renovated }}</option>
+                                {% endfor %}
+                            </select>
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>select postion :</b> </label><br>
+                        <button>map</button>
+          
+                        <input type="text" class="form-control" id="lat" name="lat"
+                               placeholder="Enter the lat  ">
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Enter the long:</b> </label><br>
+                        <input type="text" class="form-control" id="long" name="long"
+                               placeholder="Enter the long ">
+                    </div>
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Enter the sqft_living15:</b> </label><br>
+                        <input type="text" class="form-control" id="sqft_living15" name="sqft_living15"
+                               placeholder="Enter the sqft_living15 ">
+                    </div>
+
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <label><b>Enter the sqft_lot15</b> </label><br>
+                        <input type="text" class="form-control" id="sqft_lot15" name="sqft_lot15"
+                               placeholder="Enter the sqft_lot15 ">
+                    </div>
+                 
+
+
+
+
+
+                    <div class="col-md-10 form-group" style="text-align: center">
+                        <button  class="btn btn-primary form-control" onclick="send_data()">Predict Price</button>
+                    </div>
+                </form>
+                <br>
+                <div class="row">
+                    <div class="col-12" style="text-align: center">
+                        <h4><span id="prediction"></span></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function load_car_models(company_id,car_model_id)
+    {
+        var company=document.getElementById(company_id);
+        var car_model= document.getElementById(car_model_id);
+        console.log(company.value);
+        car_model.value="";
+        car_model.innerHTML="";
+        {% for company in companies %}
+            if( company.value == "{{ company }}")
+            {
+                {% for model in car_models %}
+                    {% if company in model %}
+
+                        var newOption= document.createElement("option");
+                        newOption.value="{{ model }}";
+                        newOption.innerHTML="{{ model }}";
+                        car_model.options.add(newOption);
+                    {% endif %}
+                {% endfor %}
+            }
+        {% endfor %}
+    }
+
+    function form_handler(event) {
+        event.preventDefault(); // Don't submit the form normally
+    }
+    function send_data()
+    {
+        document.querySelector('form').addEventListener("submit",form_handler);
+
+        var fd=new FormData(document.querySelector('form'));
+
+        var xhr= new XMLHttpRequest({mozSystem: true});
+
+        xhr.open('POST','/predict',true);
+        document.getElementById('prediction').innerHTML="Wait! Predicting Price.....";
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState == XMLHttpRequest.DONE){
+                document.getElementById('prediction').innerHTML="Prediction: ₹"+xhr.responseText;
+
+            }
+        };
+
+        xhr.onload= function(){};
+
+        xhr.send(fd);
+    }
+</script>
+
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+
+
+             
+      
+                                  <div id="map">
+                          <script
+                                      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBe-fZhg67jSAqeIGZ50hlk2p10lTPF23U&callback=initMap&v=weekly"
+                                      defer
+                                      ></script>
+                                  
+                                  </div>
+
+    </body>
+</html>
